@@ -1,55 +1,52 @@
 package com.michal;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.spi.CalendarDataProvider;
 
-import org.springframework.context.expression.MapAccessor;
 import org.springframework.stereotype.Service;
 
 @Service("exampleService")
 public class ServiceImpl implements IService {
-	Map<UUID, Calendar> mapaUzytkownikow = new HashMap<UUID, Calendar>();
+	Map<UUID, Calendar> userMap = new HashMap<UUID, Calendar>();
 
 	@Override
-	public Uzytkownik getLogin(String l, String h) {
-		Uzytkownik uzyt = new Uzytkownik();
-		uzyt.setLogin(l);
-		uzyt.setHaslo(h);
+	public User getLogin(String l, String h) {
+		User user = new User();
+		user.setLogin(l);
+		user.setPassword(h);
 
-		Calendar cal = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance();
 
-		mapaUzytkownikow.put(uzyt.getZeton(), cal);
+		userMap.put(user.getToken(), calendar);
 
-		return uzyt;
+		return user;
 
 	}
 
-	public Boolean sprawdzZeton(UUID zeton) {
+	public Boolean checkToken(UUID token) {
 
-		Calendar calTeraz = Calendar.getInstance();
+		Calendar calendarNow = Calendar.getInstance();
 
-		int minuty = calTeraz.get(Calendar.MINUTE);
-		int sekundy = calTeraz.get(Calendar.SECOND);
+		int minutes = calendarNow.get(Calendar.MINUTE);
+		int seconds = calendarNow.get(Calendar.SECOND);
 
-		Calendar czasLogowania = mapaUzytkownikow.get(zeton);
+		Calendar timeLogin = userMap.get(token);
 
-		if ((czasLogowania.get(Calendar.MINUTE) + 1) > minuty
-				|| (czasLogowania.get(Calendar.SECOND)) >= sekundy)
+		if ((timeLogin.get(Calendar.MINUTE) + 1) > minutes
+				|| (timeLogin.get(Calendar.SECOND)) >= seconds)
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public String wypiszCos(UUID zeton) {
-		if (sprawdzZeton(zeton) == true)
-			return "zalogowano";
+	public String writeSomething(UUID token) {
+		if (checkToken(token) == true)
+			return "logged";
 		else
-			return "uplynal czas waznosci tokena zaloguj sie ponownie";
+			return "ups token is invalid";
 	}
 
 }

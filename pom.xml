@@ -32,6 +32,18 @@
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        
+        <dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.1.1</version>
+</dependency>
+
+<dependency>
+   <groupId>org.codehaus.jackson</groupId>
+   <artifactId>jackson-mapper-asl</artifactId>
+   <version>1.9.13</version>
+  </dependency>
     </dependencies>
     <build>
         <finalName>RestToken</finalName>
